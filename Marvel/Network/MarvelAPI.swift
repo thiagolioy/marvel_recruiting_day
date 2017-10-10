@@ -10,12 +10,9 @@ import Foundation
 import CryptoSwift
 import Keys
 
-protocol MarvelService {
-    func characters(query: String?, completion: @escaping ([Character]) -> Void)
-}
 
 
-fileprivate struct MarvelAPIConfig {
+struct MarvelAPIConfig {
     fileprivate static let keys = MarvelKeys()
     static let privatekey = keys.marvelPrivateKey()!
     static let apikey = keys.marvelApiKey()!
@@ -23,7 +20,7 @@ fileprivate struct MarvelAPIConfig {
     static let hash = "\(ts)\(privatekey)\(apikey)".md5()
 }
 
-fileprivate struct CharactersResponse: Codable {
+struct CharactersResponse: Codable {
     
     struct DataResponse: Codable  {
         var results: [Character]
@@ -60,51 +57,4 @@ fileprivate struct CharactersResponse: Codable {
     }
 }
 
-class MarvelServiceImpl: MarvelService {
-    
-    
-    var authParams: [URLQueryItem] {
-        return [
-            URLQueryItem(name: "apikey", value: MarvelAPIConfig.apikey),
-            URLQueryItem(name: "ts", value: MarvelAPIConfig.ts),
-            URLQueryItem(name: "hash", value: MarvelAPIConfig.hash)
-        ]
-    }
-    
-    func characters(query: String?, completion: @escaping ([Character]) -> Void) {
-        let endpoint = "https://gateway.marvel.com:443/v1/public/characters"
-        var urlComps = URLComponents(string: endpoint)
-        
-        var queryItems: [URLQueryItem] = []
-        queryItems.append(contentsOf: authParams)
-        if let query = query {
-            let queryItem = URLQueryItem(name: "nameStartsWith", value: query)
-            queryItems.append(queryItem)
-        }
-        urlComps?.queryItems = queryItems
-        
-        guard let url = urlComps?.url else {
-            fatalError("Should create url")
-        }
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                fatalError("Should have a valid data")
-            }
-            
-            let jsonDecoder = JSONDecoder()
-            
-            do {
-                let responseObj = try jsonDecoder.decode(CharactersResponse.self, from: data)
-                DispatchQueue.main.async {
-                    completion(responseObj.data.results)
-                }
-            } catch {
-                fatalError("error: \(error)")
-            }
-            
-        }
-        
-        task.resume()
-        
-    }
-}
+
