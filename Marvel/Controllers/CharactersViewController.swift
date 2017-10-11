@@ -8,12 +8,18 @@
 
 import UIKit
 
-final class CharactersViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout {
+final class CharactersViewController: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    var tableViewDataSource: CharacterTableViewDataSource?
+
+    var collectionViewDataSource: CharacterCollectionViewDataSource?
+    var collectionViewDelegate: CharacterCollectionViewDelegate?
+    
     
     var characters: [Character] = []
     let service: MarvelService = MarvelServiceImpl()
@@ -22,17 +28,25 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         self.searchBar.delegate = self
-       
-        
-        self.tableView.register(cellType: CharacterTableCell.self)
-        self.collectionView.register(cellType: CharacterCollectionCell.self)
-        
-        self.tableView.dataSource = self
-        self.collectionView.dataSource = self
-        self.collectionView.delegate = self
-        
         fetchCharacters()
         
+    }
+    
+    func setupTableView(with items: [Character]) {
+        tableViewDataSource = CharacterTableViewDataSource(items: characters,
+                                                           tableView: tableView)
+        tableView.dataSource = tableViewDataSource
+        tableView.reloadData()
+    }
+    
+    func setupCollectionView(with items: [Character]) {
+        collectionViewDataSource = CharacterCollectionViewDataSource(items: characters,
+                                                                collectionView: collectionView)
+        collectionViewDelegate = CharacterCollectionViewDelegate()
+        
+        collectionView.dataSource = collectionViewDataSource
+        collectionView.delegate = collectionViewDelegate
+        collectionView.reloadData()
     }
     
     func fetchCharacters(query: String? = nil) {
@@ -49,48 +63,17 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
                     self.showingAsList = true
                     self.tableView.isHidden = false
                     self.collectionView.isHidden = true
-                    self.tableView.rowHeight = 80
-                    self.tableView.reloadData()
+                    self.setupTableView(with: characters)
                 } else {
                     self.showingAsList = false
                     self.collectionView.isHidden = false
                     self.tableView.isHidden = true
-                    self.collectionView.reloadData()
+                    self.setupCollectionView(with: characters)
                 }
             case .error(let error):
                 print(error)
             }
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.characters.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(for: indexPath,
-                                                      cellType: CharacterCollectionCell.self)
-        let character = self.characters[indexPath.row]
-        cell.setup(character: character)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numberOfCells = CGFloat(2)
-        let width = collectionView.bounds.size.width / numberOfCells
-        return CGSize(width: width, height: width)
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return characters.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(for: indexPath,
-                                                 cellType: CharacterTableCell.self)
-        let character = characters[indexPath.row]
-        cell.setup(character: character)
-        return cell 
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -108,14 +91,14 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         self.showingAsList = false
         self.collectionView.isHidden = false
         self.tableView.isHidden = true
-        self.collectionView.reloadData()
+        self.setupCollectionView(with: characters)
     }
     
     @IBAction func showAsTable(_ sender: UIButton) {
         self.showingAsList = true
         self.tableView.isHidden = false
         self.collectionView.isHidden = true
-        self.tableView.reloadData()
+        self.setupTableView(with: characters)
     }
 
     
