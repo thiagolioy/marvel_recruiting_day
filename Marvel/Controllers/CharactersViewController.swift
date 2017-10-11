@@ -32,11 +32,16 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         
+        fetchCharacters()
+        
+    }
+    
+    func fetchCharacters(query: String? = nil) {
         tableView.isHidden = true
         collectionView.isHidden = true
         activityIndicator.startAnimating()
         
-        service.fetchCharacters(query: nil) { result in
+        service.fetchCharacters(query: query) { result in
             self.activityIndicator.stopAnimating()
             switch result {
             case .success(let characters):
@@ -95,31 +100,7 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         searchBar.resignFirstResponder()
         let query = searchBar.text ?? ""
         if !query.isEmpty {
-            
-            tableView.isHidden = true
-            collectionView.isHidden = true
-            activityIndicator.startAnimating()
-            service.fetchCharacters(query: query) { result in
-                self.activityIndicator.stopAnimating()
-                switch result {
-                case .success(let characters):
-                    self.characters = characters
-                    if self.showingAsList {
-                        self.showingAsList = true
-                        self.tableView.isHidden = false
-                        self.collectionView.isHidden = true
-                        self.tableView.rowHeight = 80
-                        self.tableView.reloadData()
-                    } else {
-                        self.showingAsList = false
-                        self.collectionView.isHidden = false
-                        self.tableView.isHidden = true
-                        self.collectionView.reloadData()
-                    }
-                case .error(let error):
-                    print(error)
-                }
-            }
+            fetchCharacters(query: query)
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
