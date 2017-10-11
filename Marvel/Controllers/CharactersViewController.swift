@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CharactersViewController: UIViewController, UISearchBarDelegate {
+final class CharactersViewController: UIViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -20,16 +20,61 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
     var collectionViewDataSource: CharacterCollectionViewDataSource?
     var collectionViewDelegate: CharacterCollectionViewDelegate?
     
-    
-    var characters: [Character] = []
     let service: MarvelService = MarvelServiceImpl()
-    var showingAsList = true
+    var characters: [Character] = []
     
+    fileprivate enum LoadingState {
+        case loading
+        case ready
+    }
+    
+    fileprivate enum PresentationState {
+        case list
+        case grid
+        case error
+    }
+    
+    fileprivate var loadingState: LoadingState = .ready {
+        didSet {
+            switch loadingState {
+            case .loading:
+                activityIndicator.startAnimating()
+            case .ready:
+                activityIndicator.stopAnimating()
+                
+            }
+        }
+    }
+
+    fileprivate var presentationState: PresentationState = .list {
+        didSet {
+            refreshUI(for: presentationState)
+        }
+        
+    }
+}
+
+extension CharactersViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.searchBar.delegate = self
+        setupSearchBar()
         fetchCharacters()
-        
+    }
+}
+
+extension CharactersViewController {
+    fileprivate func refreshUI(for presentationState: PresentationState) {
+        switch presentationState {
+        case .list:
+            tableView.isHidden = false
+            collectionView.isHidden = true
+        case .grid:
+            tableView.isHidden = true
+            collectionView.isHidden = false
+        case .error:
+            tableView.isHidden = true
+            collectionView.isHidden = true
+        }
     }
     
     func setupTableView(with items: [Character]) {
@@ -41,39 +86,48 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
     
     func setupCollectionView(with items: [Character]) {
         collectionViewDataSource = CharacterCollectionViewDataSource(items: characters,
-                                                                collectionView: collectionView)
+                                                                     collectionView: collectionView)
         collectionViewDelegate = CharacterCollectionViewDelegate()
         
         collectionView.dataSource = collectionViewDataSource
         collectionView.delegate = collectionViewDelegate
         collectionView.reloadData()
     }
-    
+}
+
+extension CharactersViewController {
     func fetchCharacters(query: String? = nil) {
-        tableView.isHidden = true
-        collectionView.isHidden = true
-        activityIndicator.startAnimating()
-        
+        loadingState = .loading
         service.fetchCharacters(query: query) { result in
-            self.activityIndicator.stopAnimating()
+            self.loadingState = .ready
             switch result {
             case .success(let characters):
                 self.characters = characters
-                if self.showingAsList {
-                    self.showingAsList = true
-                    self.tableView.isHidden = false
-                    self.collectionView.isHidden = true
-                    self.setupTableView(with: characters)
-                } else {
-                    self.showingAsList = false
-                    self.collectionView.isHidden = false
-                    self.tableView.isHidden = true
-                    self.setupCollectionView(with: characters)
-                }
+                self.setupTableView(with: characters)
+                self.setupCollectionView(with: characters)
+                self.refreshUI(for: self.presentationState)
             case .error(let error):
                 print(error)
             }
         }
+    }
+
+}
+
+extension CharactersViewController {
+    @IBAction func showAsGrid(_ sender: UIButton) {
+        presentationState = .grid
+    }
+    
+    @IBAction func showAsTable(_ sender: UIButton) {
+        presentationState = .list
+    }
+}
+
+
+extension CharactersViewController: UISearchBarDelegate {
+    func setupSearchBar() {
+        self.searchBar.delegate = self
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -86,20 +140,5 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-    
-    @IBAction func showAsGrid(_ sender: UIButton) {
-        self.showingAsList = false
-        self.collectionView.isHidden = false
-        self.tableView.isHidden = true
-        self.setupCollectionView(with: characters)
-    }
-    
-    @IBAction func showAsTable(_ sender: UIButton) {
-        self.showingAsList = true
-        self.tableView.isHidden = false
-        self.collectionView.isHidden = true
-        self.setupTableView(with: characters)
-    }
-
-    
 }
+
