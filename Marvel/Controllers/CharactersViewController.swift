@@ -16,7 +16,7 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
     @IBOutlet weak var collectionView: UICollectionView!
     
     var characters: [Character] = []
-    
+    let service: MarvelService = MarvelServiceImpl()
     var showingAsList = true
     
     override func viewDidLoad() {
@@ -36,53 +36,27 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         collectionView.isHidden = true
         activityIndicator.startAnimating()
         
-        let endpoint = "https://gateway.marvel.com:443/v1/public/characters"
-        var urlComps = URLComponents(string: endpoint)
-        
-        let queryItems: [URLQueryItem] = [
-            URLQueryItem(name: "apikey", value: MarvelAPIConfig.apikey),
-            URLQueryItem(name: "ts", value: MarvelAPIConfig.ts),
-            URLQueryItem(name: "hash", value: MarvelAPIConfig.hash)
-        ]
-        urlComps?.queryItems = queryItems
-        
-        guard let url = urlComps?.url else {
-            fatalError("Should create url")
-        }
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                fatalError("Should have a valid data")
-            }
-            
-            let jsonDecoder = JSONDecoder()
-            
-            do {
-                let responseObj = try jsonDecoder.decode(CharactersResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    self.characters = responseObj.data.results
-                    
-                    if self.showingAsList {
-                        self.showingAsList = true
-                        self.tableView.isHidden = false
-                        self.collectionView.isHidden = true
-                        self.tableView.rowHeight = 80
-                        self.tableView.reloadData()
-                    } else {
-                        self.showingAsList = false
-                        self.collectionView.isHidden = false
-                        self.tableView.isHidden = true
-                        self.collectionView.reloadData()
-                    }
+        service.fetchCharacters(query: nil) { result in
+            self.activityIndicator.stopAnimating()
+            switch result {
+            case .success(let characters):
+                self.characters = characters
+                if self.showingAsList {
+                    self.showingAsList = true
+                    self.tableView.isHidden = false
+                    self.collectionView.isHidden = true
+                    self.tableView.rowHeight = 80
+                    self.tableView.reloadData()
+                } else {
+                    self.showingAsList = false
+                    self.collectionView.isHidden = false
+                    self.tableView.isHidden = true
+                    self.collectionView.reloadData()
                 }
-            } catch {
-                fatalError("error: \(error)")
+            case .error(let error):
+                print(error)
             }
-            
         }
-        
-        task.resume()
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -125,55 +99,27 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
             tableView.isHidden = true
             collectionView.isHidden = true
             activityIndicator.startAnimating()
-            
-            let endpoint = "https://gateway.marvel.com:443/v1/public/characters"
-            var urlComps = URLComponents(string: endpoint)
-            
-            let queryItems: [URLQueryItem] = [
-                URLQueryItem(name: "apikey", value: MarvelAPIConfig.apikey),
-                URLQueryItem(name: "ts", value: MarvelAPIConfig.ts),
-                URLQueryItem(name: "hash", value: MarvelAPIConfig.hash),
-                URLQueryItem(name: "nameStartsWith", value: query)
-            ]
-            
-            urlComps?.queryItems = queryItems
-            
-            guard let url = urlComps?.url else {
-                fatalError("Should create url")
-            }
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data else {
-                    fatalError("Should have a valid data")
-                }
-                
-                let jsonDecoder = JSONDecoder()
-                
-                do {
-                    let responseObj = try jsonDecoder.decode(CharactersResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.activityIndicator.stopAnimating()
-                        self.characters = responseObj.data.results
-                        
-                        if self.showingAsList {
-                            self.showingAsList = true
-                            self.tableView.isHidden = false
-                            self.collectionView.isHidden = true
-                            self.tableView.rowHeight = 80
-                            self.tableView.reloadData()
-                        } else {
-                            self.showingAsList = false
-                            self.collectionView.isHidden = false
-                            self.tableView.isHidden = true
-                            self.collectionView.reloadData()
-                        }
+            service.fetchCharacters(query: query) { result in
+                self.activityIndicator.stopAnimating()
+                switch result {
+                case .success(let characters):
+                    self.characters = characters
+                    if self.showingAsList {
+                        self.showingAsList = true
+                        self.tableView.isHidden = false
+                        self.collectionView.isHidden = true
+                        self.tableView.rowHeight = 80
+                        self.tableView.reloadData()
+                    } else {
+                        self.showingAsList = false
+                        self.collectionView.isHidden = false
+                        self.tableView.isHidden = true
+                        self.collectionView.reloadData()
                     }
-                } catch {
-                    fatalError("error: \(error)")
+                case .error(let error):
+                    print(error)
                 }
-                
             }
-            
-            task.resume()
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
