@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import Reusable
 
-final class CharacterTableCell: UITableViewCell {
+final class CharacterTableCell: UITableViewCell, NibReusable {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var characterDescription: UILabel!
     @IBOutlet weak var thumb: UIImageView!
+    
+    func setup(character: Character) {
+        name.text = character.name
+        characterDescription.text = character.bio.isEmpty ? "No description" : character.bio
+        thumb.download(image: character.thumbImage?.fullPath() ?? "")
+    }
 }

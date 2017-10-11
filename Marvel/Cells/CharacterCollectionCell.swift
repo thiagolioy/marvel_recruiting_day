@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import Reusable
 
-
-final class CharacterCollectionCell: UICollectionViewCell {
+final class CharacterCollectionCell: UICollectionViewCell, NibReusable {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var thumb: UIImageView!
+    
+    func setup(character: Character) {
+        name.text = character.name
+        thumb.download(image: character.thumbImage?.fullPath() ?? "")
+    }
     
 }

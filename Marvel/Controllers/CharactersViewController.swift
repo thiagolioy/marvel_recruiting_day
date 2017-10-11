@@ -24,9 +24,8 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         self.searchBar.delegate = self
        
         
-        self.tableView.register(UINib(nibName: "CharacterTableCell", bundle: nil),
-                                forCellReuseIdentifier: "CharacterTableCell")
-        self.collectionView.register(UINib(nibName: "CharacterCollectionCell", bundle: nil), forCellWithReuseIdentifier: "CharacterCollectionCell")
+        self.tableView.register(cellType: CharacterTableCell.self)
+        self.collectionView.register(cellType: CharacterCollectionCell.self)
         
         self.tableView.dataSource = self
         self.collectionView.dataSource = self
@@ -69,11 +68,11 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CharacterCollectionCell", for: indexPath) as? CharacterCollectionCell
+        let cell = collectionView.dequeueReusableCell(for: indexPath,
+                                                      cellType: CharacterCollectionCell.self)
         let character = self.characters[indexPath.row]
-        cell?.name.text = character.name
-        cell?.thumb.download(image: character.thumbImage?.fullPath() ?? "")
-        return cell ?? UICollectionViewCell()
+        cell.setup(character: character)
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -87,13 +86,11 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterTableCell", for: indexPath)
-        as? CharacterTableCell
+        let cell = tableView.dequeueReusableCell(for: indexPath,
+                                                 cellType: CharacterTableCell.self)
         let character = characters[indexPath.row]
-        cell?.name.text = character.name
-        cell?.characterDescription.text = character.bio.isEmpty ? "No description" : character.bio
-        cell?.thumb.download(image: character.thumbImage?.fullPath() ?? "")
-        return cell ?? UITableViewCell()
+        cell.setup(character: character)
+        return cell 
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
