@@ -41,11 +41,63 @@ extension UIViewController {
 // swiftlint:disable type_body_length
 
 struct Storyboard {
+  enum Heroes: String, StoryboardSceneType {
+    static let storyboardName = "Heroes"
+
+    case charactersViewControllerScene = "CharactersViewController"
+    static func instantiateCharactersViewController() -> HeroesViewController {
+      guard let vc = Storyboard.Heroes.charactersViewControllerScene.viewController() as? HeroesViewController
+      else {
+        fatalError("ViewController 'CharactersViewController' is not of the expected class HeroesViewController.")
+      }
+      return vc
+    }
+
+    case navCharactersViewControllerScene = "NavCharactersViewController"
+    static func instantiateNavCharactersViewController() -> UINavigationController {
+      guard let vc = Storyboard.Heroes.navCharactersViewControllerScene.viewController() as? UINavigationController
+      else {
+        fatalError("ViewController 'NavCharactersViewController' is not of the expected class UINavigationController.")
+      }
+      return vc
+    }
+  }
   enum LaunchScreen: StoryboardSceneType {
     static let storyboardName = "LaunchScreen"
   }
-  enum Main: String, StoryboardSceneType {
-    static let storyboardName = "Main"
+  enum Marvel: String, StoryboardSceneType {
+    static let storyboardName = "Marvel"
+
+    case marvelViewControllerScene = "MarvelViewController"
+    static func instantiateMarvelViewController() -> MarvelViewController {
+      guard let vc = Storyboard.Marvel.marvelViewControllerScene.viewController() as? MarvelViewController
+      else {
+        fatalError("ViewController 'MarvelViewController' is not of the expected class MarvelViewController.")
+      }
+      return vc
+    }
+
+    case navMarvelViewControllerScene = "NavMarvelViewController"
+    static func instantiateNavMarvelViewController() -> UINavigationController {
+      guard let vc = Storyboard.Marvel.navMarvelViewControllerScene.viewController() as? UINavigationController
+      else {
+        fatalError("ViewController 'NavMarvelViewController' is not of the expected class UINavigationController.")
+      }
+      return vc
+    }
+  }
+  enum Start: StoryboardSceneType {
+    static let storyboardName = "Start"
+
+    static func initialViewController() -> UITabBarController {
+      guard let vc = storyboard().instantiateInitialViewController() as? UITabBarController else {
+        fatalError("Failed to instantiate initialViewController for \(self.storyboardName)")
+      }
+      return vc
+    }
+  }
+  enum Villains: String, StoryboardSceneType {
+    static let storyboardName = "Villains"
 
     static func initialViewController() -> UINavigationController {
       guard let vc = storyboard().instantiateInitialViewController() as? UINavigationController else {
@@ -54,11 +106,20 @@ struct Storyboard {
       return vc
     }
 
-    case charactersViewControllerScene = "CharactersViewController"
-    static func instantiateCharactersViewController() -> CharactersViewController {
-      guard let vc = Storyboard.Main.charactersViewControllerScene.viewController() as? CharactersViewController
+    case navViliansViewControllerScene = "NavViliansViewController"
+    static func instantiateNavViliansViewController() -> UINavigationController {
+      guard let vc = Storyboard.Villains.navViliansViewControllerScene.viewController() as? UINavigationController
       else {
-        fatalError("ViewController 'CharactersViewController' is not of the expected class CharactersViewController.")
+        fatalError("ViewController 'NavViliansViewController' is not of the expected class UINavigationController.")
+      }
+      return vc
+    }
+
+    case viliansViewControllerScene = "ViliansViewController"
+    static func instantiateViliansViewController() -> ViliansViewController {
+      guard let vc = Storyboard.Villains.viliansViewControllerScene.viewController() as? ViliansViewController
+      else {
+        fatalError("ViewController 'ViliansViewController' is not of the expected class ViliansViewController.")
       }
       return vc
     }

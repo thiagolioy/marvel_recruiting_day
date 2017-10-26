@@ -19,4 +19,11 @@ final class CharacterTableCell: UITableViewCell, NibReusable {
         characterDescription.text = character.bio.isEmpty ? "No description" : character.bio
         thumb.download(image: character.thumbImage?.fullPath() ?? "")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.name.text = nil
+        self.characterDescription.text = nil
+        self.thumb.image = nil
+    }
 }

@@ -1,15 +1,14 @@
 //
-//  CharacterTableViewDatasource.swift
+//  MarvelTableViewDatasource.swift
 //  Marvel
 //
-//  Created by Thiago Lioy on 10/10/17.
+//  Created by Jonas Tomaz on 25/10/17.
 //  Copyright © 2017 Thiago Lioy. All rights reserved.
 //
 
 import UIKit
 
-final class CharacterTableViewDataSource: NSObject, UITableViewDataSource {
-    
+class MarvelTableViewDatasource: NSObject , UITableViewDataSource{
     let items: [Character]
     
     init(items: [Character], tableView: UITableView) {
@@ -19,7 +18,7 @@ final class CharacterTableViewDataSource: NSObject, UITableViewDataSource {
     }
     
     private func setupTableView(_ tableView: UITableView) {
-        tableView.register(cellType: CharacterTableCell.self)
+        tableView.register(cellType: MarvelTableViewCell.self)
         tableView.estimatedRowHeight = 80
         tableView.rowHeight = UITableViewAutomaticDimension
     }
@@ -30,10 +29,9 @@ final class CharacterTableViewDataSource: NSObject, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath,
-                                                 cellType: CharacterTableCell.self)
+                                                 cellType: MarvelTableViewCell.self)
         let character = items[indexPath.row]
         cell.setup(character: character)
         return cell
     }
-    
 }

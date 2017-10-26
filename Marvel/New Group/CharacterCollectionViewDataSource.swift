@@ -15,7 +15,7 @@ final class CharacterCollectionViewDataSource: NSObject, UICollectionViewDataSou
     init(items: [Character], collectionView: UICollectionView) {
         self.items = items
         super.init()
-        registerCells(in: collectionView)
+//        registerCells(in: collectionView)
     }
     
     private func registerCells(in collectionView: UICollectionView) {

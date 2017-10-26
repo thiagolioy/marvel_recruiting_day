@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="6ev-Bx-2Nv">
+            <objects>
+                <navigationController storyboardIdentifier="NavMarvelViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Znd-0U-RVl" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" systemItem="more" id="Lek-6m-TOH"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Hcy-O3-m8t">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.34509803919999998" green="0.7725490196" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="J5o-65-nQ4" kind="relationship" relationship="rootViewController" id="YPQ-2B-HgW"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F4h-0w-eOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1081" y="161"/>
+        </scene>
+        <!--Marvel-->
+        <scene sceneID="WwK-NC-DZ3">
+            <objects>
+                <viewController storyboardIdentifier="MarvelViewController" title="Marvel" useStoryboardIdentifierAsRestorationIdentifier="YES" id="J5o-65-nQ4" customClass="MarvelViewController" customModule="Marvel" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oUa-uz-bBl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7bn-AN-9Z1">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="IcR-ix-pzg">
+                                <rect key="frame" x="178" y="324" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.2666666667" green="0.33333333329999998" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="sdo-PY-Kpi" firstAttribute="bottom" secondItem="7bn-AN-9Z1" secondAttribute="bottom" id="FNq-bJ-5tY"/>
+                            <constraint firstItem="7bn-AN-9Z1" firstAttribute="leading" secondItem="sdo-PY-Kpi" secondAttribute="leading" id="HFC-zH-yuq"/>
+                            <constraint firstItem="sdo-PY-Kpi" firstAttribute="trailing" secondItem="7bn-AN-9Z1" secondAttribute="trailing" id="ROW-Cw-e2G"/>
+                            <constraint firstItem="IcR-ix-pzg" firstAttribute="centerX" secondItem="oUa-uz-bBl" secondAttribute="centerX" id="bgh-do-Bau"/>
+                            <constraint firstItem="IcR-ix-pzg" firstAttribute="centerY" secondItem="oUa-uz-bBl" secondAttribute="centerY" id="dvA-z3-b1D"/>
+                            <constraint firstItem="7bn-AN-9Z1" firstAttribute="top" secondItem="sdo-PY-Kpi" secondAttribute="top" id="f0d-4h-xwh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="sdo-PY-Kpi"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Marvel" id="7BR-SU-zxg"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="IcR-ix-pzg" id="q2Y-pA-dvh"/>
+                        <outlet property="tableView" destination="7bn-AN-9Z1" id="Xw3-35-78g"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wG8-yG-Cp4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-132" y="-12"/>
+        </scene>
+    </scenes>
+</document>
