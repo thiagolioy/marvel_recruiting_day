@@ -67,7 +67,9 @@ class MarvelServiceImpl: MarvelService {
                     callback(.success(responseObj.data.results))
                 }
             } catch {
-                callback(.error(error))
+                DispatchQueue.main.async {
+                    callback(.error(error))
+                }
             }
             
         }
