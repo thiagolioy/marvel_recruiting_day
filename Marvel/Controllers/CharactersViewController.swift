@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CharactersViewController: UIViewController {
+class CharactersViewController: UIViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -22,6 +22,16 @@ final class CharactersViewController: UIViewController {
     
     let service: MarvelService = MarvelServiceImpl()
     var characters: [Character] = []
+    
+    public static func initFromStoryboard() -> CharactersViewController {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: Bundle(for: self))
+        guard let viewController =
+            storyboard.instantiateViewController(withIdentifier:
+                String(describing: CharactersViewController.self)) as? CharactersViewController else {
+                fatalError("Could not load a viewcontroller for identifier CharactersViewController")
+        }
+        return viewController
+    }
     
     fileprivate enum LoadingState {
         case loading

@@ -14,6 +14,12 @@ struct Character: Codable {
     var bio: String
     var thumbImage: ThumbImage?
     
+    init(){
+        id = 0
+        name = ""
+        bio = ""
+    }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -36,4 +42,6 @@ struct Character: Codable {
         bio = try values.decode(String.self, forKey: .bio)
         thumbImage = try values.decode(Optional<ThumbImage>.self, forKey: .thumbImage)
     }
+    
+
 }

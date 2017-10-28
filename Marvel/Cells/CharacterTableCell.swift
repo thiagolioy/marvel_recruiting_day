@@ -14,6 +14,15 @@ final class CharacterTableCell: UITableViewCell, NibReusable {
     @IBOutlet weak var characterDescription: UILabel!
     @IBOutlet weak var thumb: UIImageView!
     
+    public static func initFromNib() -> CharacterTableCell{
+        guard let cell = Bundle.main.loadNibNamed(String(describing: CharacterTableCell.self),
+                                            owner: nil,
+                                            options: nil)?.first as? CharacterTableCell else {
+                              fatalError("Could not load a nib named CharacterTableCell")
+        }
+        return cell
+    }
+    
     func setup(character: Character) {
         name.text = character.name
         characterDescription.text = character.bio.isEmpty ? "No description" : character.bio
