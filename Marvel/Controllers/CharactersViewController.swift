@@ -20,33 +20,24 @@ final class CharactersViewController: UIViewController {
     var collectionViewDataSource: CharacterCollectionViewDataSource?
     var collectionViewDelegate: CharacterCollectionViewDelegate?
     
-    let service: MarvelService = MarvelServiceImpl()
+    var service: MarvelService = MarvelServiceImpl()
     var characters: [Character] = []
     
-    fileprivate enum LoadingState {
-        case loading
-        case ready
-    }
     
-    fileprivate enum PresentationState {
-        case list
-        case grid
+    enum PresentationState {
+        case loading
+        case list([Character])
+        case grid([Character])
         case error
     }
     
-    fileprivate var loadingState: LoadingState = .ready {
-        didSet {
-            switch loadingState {
-            case .loading:
-                activityIndicator.startAnimating()
-            case .ready:
-                activityIndicator.stopAnimating()
-                
-            }
-        }
+    enum UserSelection {
+        case grid, list
     }
-
-    fileprivate var presentationState: PresentationState = .list {
+    
+    var userSelection: UserSelection = .list
+    
+    var presentationState: PresentationState = .loading {
         didSet {
             refreshUI(for: presentationState)
         }
@@ -65,13 +56,25 @@ extension CharactersViewController {
 extension CharactersViewController {
     fileprivate func refreshUI(for presentationState: PresentationState) {
         switch presentationState {
-        case .list:
+        case .loading:
+            activityIndicator.startAnimating()
+            tableView.isHidden = true
+            collectionView.isHidden = true
+        case .list(let chars):
+            userSelection = .list
+            activityIndicator.stopAnimating()
+            setupTableView(with: chars)
             tableView.isHidden = false
             collectionView.isHidden = true
-        case .grid:
+            
+        case .grid(let chars):
+            userSelection = .grid
+            activityIndicator.stopAnimating()
+            setupCollectionView(with: chars)
             tableView.isHidden = true
             collectionView.isHidden = false
         case .error:
+            activityIndicator.stopAnimating()
             tableView.isHidden = true
             collectionView.isHidden = true
         }
@@ -96,31 +99,36 @@ extension CharactersViewController {
 }
 
 extension CharactersViewController {
+    
     func fetchCharacters(query: String? = nil) {
-        loadingState = .loading
+        presentationState = .loading
         service.fetchCharacters(query: query) { result in
-            self.loadingState = .ready
             switch result {
             case .success(let characters):
-                self.characters = characters
-                self.setupTableView(with: characters)
-                self.setupCollectionView(with: characters)
-                self.refreshUI(for: self.presentationState)
-            case .error(let error):
-                print(error)
+                self.handle(characters: characters)
+            case .error:
+                self.presentationState = .error
             }
         }
     }
 
+    func handle(characters: [Character]) {
+        self.characters = characters
+        if userSelection == .list {
+            presentationState = .list(characters)
+        } else {
+            presentationState = .grid(characters)
+        }
+    }
 }
 
 extension CharactersViewController {
     @IBAction func showAsGrid(_ sender: UIButton) {
-        presentationState = .grid
+        presentationState = .grid(characters)
     }
     
     @IBAction func showAsTable(_ sender: UIButton) {
-        presentationState = .list
+        presentationState = .list(characters)
     }
 }
 
