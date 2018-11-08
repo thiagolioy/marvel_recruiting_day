@@ -106,61 +106,6 @@
             </objects>
             <point key="canvasLocation" x="1015.2" y="98.50074962518741"/>
         </scene>
-        <!--Character View Controller-->
-        <scene sceneID="rlr-Sb-VVK">
-            <objects>
-                <viewController storyboardIdentifier="CharacterViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="53c-Ku-ilY" customClass="CharacterViewController" customModule="Marvel" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="tri-ev-T4e"/>
-                        <viewControllerLayoutGuide type="bottom" id="JuI-kx-udS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zDc-XI-wIc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EFd-ou-pNm">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vNm-Q2-zCu">
-                                <rect key="frame" x="0.0" y="547" width="375" height="120"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qzP-QX-UdD">
-                                        <rect key="frame" x="10" y="10" width="355" height="100"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="5k4-e5-Dg7"/>
-                                    <constraint firstItem="qzP-QX-UdD" firstAttribute="top" secondItem="vNm-Q2-zCu" secondAttribute="top" constant="10" id="8ie-hx-HUk"/>
-                                    <constraint firstAttribute="bottom" secondItem="qzP-QX-UdD" secondAttribute="bottom" constant="10" id="GVP-qe-Wee"/>
-                                    <constraint firstItem="qzP-QX-UdD" firstAttribute="leading" secondItem="vNm-Q2-zCu" secondAttribute="leading" constant="10" id="S36-Wn-9BJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="qzP-QX-UdD" secondAttribute="trailing" constant="10" id="riP-qT-SMk"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="0.25098039215686274" green="0.24705882352941178" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="vNm-Q2-zCu" secondAttribute="trailing" id="0ZC-du-23U"/>
-                            <constraint firstItem="vNm-Q2-zCu" firstAttribute="leading" secondItem="zDc-XI-wIc" secondAttribute="leading" id="8gt-56-iNS"/>
-                            <constraint firstItem="EFd-ou-pNm" firstAttribute="leading" secondItem="zDc-XI-wIc" secondAttribute="leading" id="AT4-rd-6dv"/>
-                            <constraint firstItem="EFd-ou-pNm" firstAttribute="top" secondItem="tri-ev-T4e" secondAttribute="bottom" id="PpX-AG-9sK"/>
-                            <constraint firstAttribute="trailing" secondItem="EFd-ou-pNm" secondAttribute="trailing" id="qfy-t9-ecx"/>
-                            <constraint firstItem="JuI-kx-udS" firstAttribute="top" secondItem="vNm-Q2-zCu" secondAttribute="bottom" id="ukM-c0-0wC"/>
-                            <constraint firstItem="JuI-kx-udS" firstAttribute="top" secondItem="EFd-ou-pNm" secondAttribute="bottom" id="zyH-Sa-tMR"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="characterDescription" destination="qzP-QX-UdD" id="WF1-ZT-drS"/>
-                        <outlet property="characterImage" destination="EFd-ou-pNm" id="r9X-Pd-lzd"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fZE-wx-bn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1917.5999999999999" y="98.50074962518741"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="fXh-Vh-ViE">
             <objects>

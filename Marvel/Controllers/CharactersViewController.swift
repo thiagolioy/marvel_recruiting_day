@@ -106,12 +106,7 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, Cha
     }
 
     func didSelect(character: Character) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let controller = storyboard.instantiateViewController(withIdentifier: "CharacterViewController") as? CharacterViewController else {
-            fatalError("should be a controller of type CharacterViewController")
-        }
-        
-        controller.character = character
+        let controller = CharacterViewController(character: character)
         navigationController?.pushViewController(controller, animated: true)
     }
     
