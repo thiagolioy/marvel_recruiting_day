@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CharactersViewController: UIViewController, UISearchBarDelegate {
+final class CharactersViewController: UIViewController, UISearchBarDelegate, CharactersSelectionDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -16,7 +16,8 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var tableViewDataSource: CharacterTableViewDataSource?
-
+    var tableViewDelegate: CharacterTableViewDelegate?
+    
     var collectionViewDataSource: CharacterCollectionViewDataSource?
     var collectionViewDelegate: CharacterCollectionViewDelegate?
     
@@ -35,14 +36,17 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
     func setupTableView(with items: [Character]) {
         tableViewDataSource = CharacterTableViewDataSource(items: characters,
                                                            tableView: tableView)
+        tableViewDelegate = CharacterTableViewDelegate(items: characters, delegate: self)
+        
         tableView.dataSource = tableViewDataSource
+        tableView.delegate = tableViewDelegate
         tableView.reloadData()
     }
     
     func setupCollectionView(with items: [Character]) {
         collectionViewDataSource = CharacterCollectionViewDataSource(items: characters,
                                                                 collectionView: collectionView)
-        collectionViewDelegate = CharacterCollectionViewDelegate()
+        collectionViewDelegate = CharacterCollectionViewDelegate(items: characters, delegate: self)
         
         collectionView.dataSource = collectionViewDataSource
         collectionView.delegate = collectionViewDelegate
@@ -101,5 +105,14 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate {
         self.setupTableView(with: characters)
     }
 
+    func didSelect(character: Character) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let controller = storyboard.instantiateViewController(withIdentifier: "CharacterViewController") as? CharacterViewController else {
+            fatalError("should be a controller of type CharacterViewController")
+        }
+        
+        controller.character = character
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
 }
