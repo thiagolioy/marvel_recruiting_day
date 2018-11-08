@@ -9,6 +9,7 @@
 import UIKit
 
 final class CharactersViewController: UIViewController {
+
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -16,7 +17,8 @@ final class CharactersViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var tableViewDataSource: CharacterTableViewDataSource?
-
+    var tableViewDelegate: CharacterTableViewDelegate?
+    
     var collectionViewDataSource: CharacterCollectionViewDataSource?
     var collectionViewDelegate: CharacterCollectionViewDelegate?
     
@@ -80,14 +82,19 @@ extension CharactersViewController {
     func setupTableView(with items: [Character]) {
         tableViewDataSource = CharacterTableViewDataSource(items: characters,
                                                            tableView: tableView)
+        tableViewDelegate = CharacterTableViewDelegate(items: characters, delegate: self)
+        
         tableView.dataSource = tableViewDataSource
+        tableView.delegate = tableViewDelegate
         tableView.reloadData()
     }
     
     func setupCollectionView(with items: [Character]) {
         collectionViewDataSource = CharacterCollectionViewDataSource(items: characters,
-                                                                     collectionView: collectionView)
-        collectionViewDelegate = CharacterCollectionViewDelegate()
+
+                                                                collectionView: collectionView)
+        collectionViewDelegate = CharacterCollectionViewDelegate(items: characters, delegate: self)
+
         
         collectionView.dataSource = collectionViewDataSource
         collectionView.delegate = collectionViewDelegate
@@ -139,6 +146,13 @@ extension CharactersViewController: UISearchBarDelegate {
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+extension CharactersViewController: CharactersSelectionDelegate {
+    func didSelect(character: Character) {
+        let controller = CharacterViewController(character: character)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
