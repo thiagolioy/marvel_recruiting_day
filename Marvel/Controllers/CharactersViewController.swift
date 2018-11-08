@@ -38,13 +38,7 @@ final class CharactersViewController: UIViewController {
     
     fileprivate var loadingState: LoadingState = .ready {
         didSet {
-            switch loadingState {
-            case .loading:
-                activityIndicator.startAnimating()
-            case .ready:
-                activityIndicator.stopAnimating()
-                
-            }
+            refreshLoading(state: loadingState)
         }
     }
 
@@ -52,7 +46,6 @@ final class CharactersViewController: UIViewController {
         didSet {
             refreshUI(for: presentationState)
         }
-        
     }
 }
 
@@ -65,6 +58,16 @@ extension CharactersViewController {
 }
 
 extension CharactersViewController {
+    
+    fileprivate func refreshLoading(state: LoadingState) {
+        switch state {
+        case .loading:
+            activityIndicator.startAnimating()
+        case .ready:
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     fileprivate func refreshUI(for presentationState: PresentationState) {
         switch presentationState {
         case .list:
@@ -78,6 +81,8 @@ extension CharactersViewController {
             collectionView.isHidden = true
         }
     }
+}
+extension CharactersViewController {
     
     func setupTableView(with items: [Character]) {
         tableViewDataSource = CharacterTableViewDataSource(items: characters,
@@ -105,18 +110,22 @@ extension CharactersViewController {
 extension CharactersViewController {
     func fetchCharacters(query: String? = nil) {
         loadingState = .loading
-        service.fetchCharacters(query: query) { result in
-            self.loadingState = .ready
+        service.fetchCharacters(query: query) { [weak self] result in
+            self?.loadingState = .ready
             switch result {
             case .success(let characters):
-                self.characters = characters
-                self.setupTableView(with: characters)
-                self.setupCollectionView(with: characters)
-                self.refreshUI(for: self.presentationState)
-            case .error(let error):
-                print(error)
+                self?.handleFetch(of: characters)
+            case .error:
+                self?.refreshUI(for: .error)
             }
         }
+    }
+    
+    func handleFetch(of characters: [Character]) {
+        self.characters = characters
+        self.setupTableView(with: characters)
+        self.setupCollectionView(with: characters)
+        self.refreshUI(for: presentationState)
     }
 
 }
