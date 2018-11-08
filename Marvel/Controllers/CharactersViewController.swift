@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CharactersViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout {
+final class CharactersViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -28,6 +28,7 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         self.collectionView.register(cellType: CharacterCollectionCell.self)
         
         self.tableView.dataSource = self
+        self.tableView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         
@@ -118,5 +119,27 @@ final class CharactersViewController: UIViewController, UISearchBarDelegate, UIC
         self.tableView.reloadData()
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let controller = storyboard.instantiateViewController(withIdentifier: "CharacterViewController") as? CharacterViewController else {
+            fatalError("should be a controller of type CharacterViewController")
+        }
+        
+        let character = characters[indexPath.item]
+        controller.character = character
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let controller = storyboard.instantiateViewController(withIdentifier: "CharacterViewController") as? CharacterViewController else {
+            fatalError("should be a controller of type CharacterViewController")
+        }
+        
+        let character = characters[indexPath.item]
+        controller.character = character
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
 }
