@@ -40,7 +40,8 @@ class MarvelServiceImpl: MarvelService {
         var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "apikey", value: MarvelAPIConfig.apikey),
             URLQueryItem(name: "ts", value: MarvelAPIConfig.ts),
-            URLQueryItem(name: "hash", value: MarvelAPIConfig.hash)
+            URLQueryItem(name: "hash", value: MarvelAPIConfig.hash),
+            URLQueryItem(name: "limit", value: "100")
         ]
         
         if let query = query {

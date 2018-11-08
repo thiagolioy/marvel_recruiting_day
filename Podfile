@@ -16,7 +16,7 @@ target 'Marvel' do
   # Pods for Marvel
    pod 'SwiftGen'
    pod 'CryptoSwift',  :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => 'develop'
-   pod 'Kingfisher'
+   pod 'SDWebImage'
    pod "Reusable"
 end
 
