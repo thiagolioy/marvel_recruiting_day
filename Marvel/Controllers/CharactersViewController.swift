@@ -22,27 +22,27 @@ final class CharactersViewController: UIViewController {
     var collectionViewDataSource: CharacterCollectionViewDataSource?
     var collectionViewDelegate: CharacterCollectionViewDelegate?
     
-    let service: MarvelService = MarvelServiceImpl()
+    var service: MarvelService = MarvelServiceImpl()
     var characters: [Character] = []
     
-    fileprivate enum LoadingState {
+    enum LoadingState {
         case loading
         case ready
     }
     
-    fileprivate enum PresentationState {
+    enum PresentationState {
         case list
         case grid
         case error
     }
     
-    fileprivate var loadingState: LoadingState = .ready {
+    var loadingState: LoadingState = .ready {
         didSet {
             refreshLoading(state: loadingState)
         }
     }
 
-    fileprivate var presentationState: PresentationState = .list {
+    var presentationState: PresentationState = .list {
         didSet {
             refreshUI(for: presentationState)
         }

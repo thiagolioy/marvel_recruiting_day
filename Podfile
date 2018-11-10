@@ -18,6 +18,14 @@ target 'Marvel' do
    pod 'CryptoSwift',  :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => 'develop'
    pod 'SDWebImage'
    pod "Reusable"
+
+   target 'MarvelTests' do
+    inherit! :search_paths
+    # Pods for testing
+    pod "Quick"
+    pod "Nimble"
+    pod 'Nimble-Snapshots'
+  end
 end
 
 post_install do |installer|
