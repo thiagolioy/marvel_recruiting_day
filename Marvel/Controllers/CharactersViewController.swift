@@ -31,6 +31,7 @@ final class CharactersViewController: UIViewController {
     }
     
     enum PresentationState {
+        case initial
         case list
         case grid
         case error
@@ -76,7 +77,7 @@ extension CharactersViewController {
         case .grid:
             tableView.isHidden = true
             collectionView.isHidden = false
-        case .error:
+        case .error, .initial:
             tableView.isHidden = true
             collectionView.isHidden = true
         }
@@ -116,7 +117,7 @@ extension CharactersViewController {
             case .success(let characters):
                 self?.handleFetch(of: characters)
             case .error:
-                self?.refreshUI(for: .error)
+                self?.presentationState = .error
             }
         }
     }
@@ -125,7 +126,8 @@ extension CharactersViewController {
         self.characters = characters
         self.setupTableView(with: characters)
         self.setupCollectionView(with: characters)
-        self.refreshUI(for: presentationState)
+        let currentState = presentationState
+        self.presentationState = currentState
     }
 
 }

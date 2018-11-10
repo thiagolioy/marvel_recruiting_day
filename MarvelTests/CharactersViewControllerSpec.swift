@@ -63,6 +63,7 @@ class CharactersViewControllerSpec: QuickSpec {
                 
                 _ = sut.view
                 sut.loadingState = .ready
+                sut.presentationState = .initial
             }
             
             
