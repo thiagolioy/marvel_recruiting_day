@@ -14,7 +14,7 @@ struct ApperanceProxyHelper {
     static func customizeNavigationBar() {
         let navigationBarAppearace = UINavigationBar.appearance()
         navigationBarAppearace.tintColor = ColorPalette.white
-        navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:ColorPalette.white]
+        navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.foregroundColor:ColorPalette.white]
     }
     
 }

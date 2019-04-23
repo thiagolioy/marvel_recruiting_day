@@ -1,0 +1,10 @@
+name: MarvelApp
+options:
+  bundleIdPrefix: com.myapp
+targets:
+  Marvel:
+    type: application
+    platform: iOS
+    deploymentTarget: "10.0"
+    sources: [Marvel]
+
