@@ -9,12 +9,7 @@
 import UIKit
 
 final class CharactersViewController: UIViewController {
-
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    let charactersView = CharactersView()
     
     var tableViewDataSource: CharacterTableViewDataSource?
     var tableViewDelegate: CharacterTableViewDelegate?
@@ -25,67 +20,54 @@ final class CharactersViewController: UIViewController {
     let service: MarvelService = MarvelServiceImpl()
     var characters: [Character] = []
     
-    fileprivate enum LoadingState {
-        case loading
-        case ready
-    }
-    
-    fileprivate enum PresentationState {
-        case initial
-        case list
-        case grid
-        case error
-    }
-    
-    fileprivate var loadingState: LoadingState = .ready {
+    fileprivate var loadingState: CharactersView.LoadingState = .ready {
         didSet {
-            refreshLoading(state: loadingState)
+            charactersView.refreshLoading(state: loadingState)
         }
     }
 
-    fileprivate var presentationState: PresentationState = .list {
+    fileprivate var presentationState: CharactersView.PresentationState = .list {
         didSet {
-            refreshUI(for: presentationState)
+            charactersView.refreshUI(for: presentationState)
         }
     }
 }
 
 extension CharactersViewController {
+    override func loadView() {
+        view = charactersView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
         setupSearchBar()
         fetchCharacters()
     }
 }
 
 extension CharactersViewController {
-    
-    fileprivate func refreshLoading(state: LoadingState) {
-        switch state {
-        case .loading:
-            activityIndicator.startAnimating()
-        case .ready:
-            activityIndicator.stopAnimating()
-        }
+    fileprivate func setupNavBar() {
+        let buttons = navBarButtons()
+        navigationItem.rightBarButtonItems = buttons
     }
     
-    fileprivate func refreshUI(for presentationState: PresentationState) {
-        switch presentationState {
-        case .list:
-            tableView.isHidden = false
-            collectionView.isHidden = true
-        case .grid:
-            tableView.isHidden = true
-            collectionView.isHidden = false
-        case .error, .initial:
-            tableView.isHidden = true
-            collectionView.isHidden = true
-        }
+    fileprivate func navBarButtons() -> [UIBarButtonItem] {
+        let gridImage = #imageLiteral(resourceName: "Grid Icon")
+        let listImage = #imageLiteral(resourceName: "List Icon")
+        
+        let gridButton = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(showAsGrid))
+        let listButton = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(showAsTable))
+        
+        return [listButton, gridButton]
     }
 }
+
 extension CharactersViewController {
     
     func setupTableView(with items: [Character]) {
+        let tableView = charactersView.tableView
+        
         tableViewDataSource = CharacterTableViewDataSource(items: characters,
                                                            tableView: tableView)
         tableViewDelegate = CharacterTableViewDelegate(items: characters, delegate: self)
@@ -96,9 +78,10 @@ extension CharactersViewController {
     }
     
     func setupCollectionView(with items: [Character]) {
+        let collectionView = charactersView.collectionView
+        
         collectionViewDataSource = CharacterCollectionViewDataSource(items: characters,
-
-                                                                collectionView: collectionView)
+                                                                     collectionView: collectionView)
         collectionViewDelegate = CharacterCollectionViewDelegate(items: characters, delegate: self)
 
         
@@ -133,11 +116,11 @@ extension CharactersViewController {
 }
 
 extension CharactersViewController {
-    @IBAction func showAsGrid(_ sender: UIButton) {
+    @objc func showAsGrid(_ sender: UIButton) {
         presentationState = .grid
     }
     
-    @IBAction func showAsTable(_ sender: UIButton) {
+    @objc func showAsTable(_ sender: UIButton) {
         presentationState = .list
     }
 }
@@ -145,7 +128,7 @@ extension CharactersViewController {
 
 extension CharactersViewController: UISearchBarDelegate {
     func setupSearchBar() {
-        self.searchBar.delegate = self
+        charactersView.searchBar.delegate = self
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
