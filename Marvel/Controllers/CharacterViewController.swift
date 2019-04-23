@@ -9,12 +9,9 @@
 import UIKit
 import Reusable
 
-final class CharacterViewController: UIViewController, NibOwnerLoadable {
-    @IBOutlet weak var characterImage: UIImageView!
-    @IBOutlet weak var characterDescription: UILabel!
-    
+final class CharacterViewController: UIViewController {
     let character: Character
-    
+    let characterView = CharacterView()
     init(character: Character) {
         self.character = character
         super.init(nibName: nil, bundle: nil)
@@ -22,6 +19,10 @@ final class CharacterViewController: UIViewController, NibOwnerLoadable {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = characterView
     }
     
     override func viewDidLoad() {
@@ -32,7 +33,7 @@ final class CharacterViewController: UIViewController, NibOwnerLoadable {
     func setupView() {
         navigationItem.title = character.name
         
-        characterDescription.text = character.bio.isEmpty ? "No description" : character.bio
-        characterImage.download(image: character.thumbImage?.fullPath() ?? "")
+        characterView.titleBar.label.text = character.bio.isEmpty ? "No description" : character.bio
+        characterView.thumb.download(image: character.thumbImage?.fullPath() ?? "")
     }
 }

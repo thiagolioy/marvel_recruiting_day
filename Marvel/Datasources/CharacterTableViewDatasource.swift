@@ -19,7 +19,7 @@ final class CharacterTableViewDataSource: NSObject, UITableViewDataSource {
     }
     
     private func setupTableView(_ tableView: UITableView) {
-        tableView.register(cellType: CharacterTableCell.self)
+        tableView.register(CharacterTableCell.self, forCellReuseIdentifier: CharacterTableCell.reuseId)
         tableView.rowHeight = 80
     }
     
@@ -28,8 +28,7 @@ final class CharacterTableViewDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(for: indexPath,
-                                                 cellType: CharacterTableCell.self)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CharacterTableCell.reuseId) as? CharacterTableCell else { return UITableViewCell() }
         let character = items[indexPath.row]
         cell.setup(character: character)
         return cell
