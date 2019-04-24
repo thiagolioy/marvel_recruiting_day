@@ -18,16 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         ApperanceProxyHelper.customizeNavigationBar()
         window = UIWindow()
-        let viewController = CharactersViewController()
-        let navController = UINavigationController(rootViewController: viewController)
-        navController.navigationBar.barTintColor = ColorPalette.red
-        navController.navigationBar.isTranslucent = false
-        window?.rootViewController = navController
+        window?.rootViewController = createRootViewController()
         window?.makeKeyAndVisible()
         
         return true
     }
 
-
+    func createRootViewController() -> UIViewController {
+        let viewController = CharactersViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.navigationBar.barTintColor = ColorPalette.red
+        navController.navigationBar.isTranslucent = false
+        
+        return navController
+    }
 }
 
