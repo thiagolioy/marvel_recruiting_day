@@ -23,12 +23,15 @@ final class CharactersView: UIView {
     lazy  var searchBar: UISearchBar = {
         let view = UISearchBar()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.barTintColor = #colorLiteral(red: 0.2509803922, green: 0.2470588235, blue: 0.2980392157, alpha: 1)
+        view.showsCancelButton = true
         
         return view
     }()
     
     lazy  var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
+        view.color = .red
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -38,6 +41,7 @@ final class CharactersView: UIView {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
+        view.isHidden = true
         
         return view
     }()
@@ -57,6 +61,7 @@ final class CharactersView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = #colorLiteral(red: 0.2509803922, green: 0.2470588235, blue: 0.2980392157, alpha: 1)
         setupView()
     }
     

@@ -40,6 +40,7 @@ extension CharactersViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Marvel"
         setupNavBar()
         setupSearchBar()
         fetchCharacters()
