@@ -1,18 +1,18 @@
 PODS:
-  - CryptoSwift (0.7.2)
+  - CryptoSwift (1.0.0)
   - Keys (1.0.1)
-  - Reusable (3.0.0):
-    - Reusable/Storyboard (= 3.0.0)
-    - Reusable/View (= 3.0.0)
-  - Reusable/Storyboard (3.0.0)
-  - Reusable/View (3.0.0)
-  - SDWebImage (4.4.2):
-    - SDWebImage/Core (= 4.4.2)
-  - SDWebImage/Core (4.4.2)
-  - SwiftGen (3.0.1)
+  - Reusable (4.0.5):
+    - Reusable/Storyboard (= 4.0.5)
+    - Reusable/View (= 4.0.5)
+  - Reusable/Storyboard (4.0.5)
+  - Reusable/View (4.0.5)
+  - SDWebImage (5.0.1):
+    - SDWebImage/Core (= 5.0.1)
+  - SDWebImage/Core (5.0.1)
+  - SwiftGen (6.1.0)
 
 DEPENDENCIES:
-  - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `develop`)
+  - CryptoSwift
   - Keys (from `Pods/CocoaPodsKeys`)
   - Reusable
   - SDWebImage
@@ -20,29 +20,22 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - CryptoSwift
     - Reusable
     - SDWebImage
     - SwiftGen
 
 EXTERNAL SOURCES:
-  CryptoSwift:
-    :branch: develop
-    :git: https://github.com/krzyzanowskim/CryptoSwift
   Keys:
     :path: Pods/CocoaPodsKeys
 
-CHECKOUT OPTIONS:
-  CryptoSwift:
-    :commit: 45ad5c43b517fb43cf3c0e11ec574bbcecf5a953
-    :git: https://github.com/krzyzanowskim/CryptoSwift
-
 SPEC CHECKSUMS:
-  CryptoSwift: 43aed86b4b52edc487058ff2f0a4c554e57f9cf2
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
-  Reusable: ab77c4c51a4b9606946df70e30cb8ad9cf75c226
-  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  SwiftGen: 5f69367fae99c11d52d1ab9d45dcf10a3e59b8ef
+  Reusable: 188be1a54ac0691bc66e5bb24ec6eb91971b315b
+  SDWebImage: 27dd2c9ea07a2252f94557c9fbb6105ee94b74c9
+  SwiftGen: f872ca75cbd17bf7103c17f13dcfa0d9a15667b0
 
-PODFILE CHECKSUM: 7ecf7c08271f6cb1d4e27dfa185baa03a1a27633
+PODFILE CHECKSUM: af5fb6ab194133bb38769142e45936cc3b314038
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

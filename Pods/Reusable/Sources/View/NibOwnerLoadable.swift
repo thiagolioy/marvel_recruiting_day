@@ -34,31 +34,28 @@ public extension NibOwnerLoadable {
 
 public extension NibOwnerLoadable where Self: UIView {
   /**
-   Returns a `UIView` object instantiated from nib
-
-   - parameter owner: The instance of the view which will be your File's Owner
-                      (and to which you want to add the XIB's views as subviews).
-                      Defaults to a brand new instance if not provided.
-   - returns: A `NibOwnLoadable`, `UIView` instance
+   Adds content loaded from the nib to the end of the receiver's list of subviews and adds constraints automatically.
    */
-  @discardableResult
-  static func loadFromNib(owner: Self = Self()) -> Self {
-    let layoutAttributes: [NSLayoutAttribute] = [.top, .leading, .bottom, .trailing]
-    for view in nib.instantiate(withOwner: owner, options: nil) {
-      if let view = view as? UIView {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        owner.addSubview(view)
-        layoutAttributes.forEach { attribute in
-          owner.addConstraint(NSLayoutConstraint(item: view,
-            attribute: attribute,
-            relatedBy: .equal,
-            toItem: owner,
-            attribute: attribute,
-            multiplier: 1,
-            constant: 0.0))
-        }
-      }
+  func loadNibContent() {
+    let layoutAttributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
+    for case let view as UIView in Self.nib.instantiate(withOwner: self, options: nil) {
+      view.translatesAutoresizingMaskIntoConstraints = false
+      self.addSubview(view)
+      NSLayoutConstraint.activate(layoutAttributes.map { attribute in
+        NSLayoutConstraint(
+          item: view, attribute: attribute,
+          relatedBy: .equal,
+          toItem: self, attribute: attribute,
+          multiplier: 1, constant: 0.0
+        )
+      })
     }
-    return owner
   }
 }
+
+/// Swift < 4.2 support
+#if !(swift(>=4.2))
+private extension NSLayoutConstraint {
+  typealias Attribute = NSLayoutAttribute
+}
+#endif
